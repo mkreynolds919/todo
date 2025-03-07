@@ -1,5 +1,25 @@
 
-export default class Todo {
+class Project {
+    constructor(title, description, dueDate, progress) {
+        this.title = title;
+        this.description = description;
+        this._dueDate = dueDate;
+        this._progress = progress;
+        this.contents = [];
+    }
+
+    set progress(value) {
+        const statuses = ["Not started", "In progress", "Completed"];
+        if (statuses.includes(value)) {
+            this._progress = value;
+        }
+    }
+
+    
+}
+
+
+class Todo {
     constructor(title, description, dueDate, priority, notes, status) {
         this.title = title;
         this.description = description;
@@ -17,7 +37,7 @@ export default class Todo {
     }
 
     set status(value) {
-        const statuses = ["not started", "in progress", "completed"];
+        const statuses = ["Not started", "In progress", "Completed"];
         if (statuses.includes(value)) {
             this._status = value;
         }
