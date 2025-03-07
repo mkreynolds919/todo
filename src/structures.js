@@ -42,4 +42,12 @@ class Todo {
             this._status = value;
         }
     }
+
+    get priority() {
+        return this._priority;
+    }
+    
+    get status() {
+        return this._status;
+    }
 }
