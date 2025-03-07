@@ -1,22 +1,33 @@
 
+import { format } from "date-fns";
+
 class Project {
-    constructor(title, description, dueDate, progress) {
+    constructor(title, description, dueDate, status) {
         this.title = title;
         this.description = description;
-        this._dueDate = dueDate;
-        this._progress = progress;
+        this.dueDate = dueDate;
+        this.status = status;
         this.contents = [];
     }
 
-    set progress(value) {
-        const statuses = ["Not started", "In progress", "Completed"];
-        if (statuses.includes(value)) {
-            this._progress = value;
+    set status(value) {
+        if (StatusValidator.validate(value)) {
+            this._status = value;
         }
     }
 
-    get progress() {
-        return this._progress;
+    set dueDate(value) {
+        if (DueDateValidator.validate(value)) {
+            this._dueDate = value;
+        }
+    }
+
+    get status() {
+        return this._status;
+    }
+
+    get dueDate() {
+        return DueDateFormatter.formatDueDate(this._dueDate);
     }
 }
 
@@ -24,23 +35,27 @@ class Todo {
     constructor(title, description, dueDate, priority, notes, status) {
         this.title = title;
         this.description = description;
-        this._dueDate = dueDate;
-        this._priority = priority;
+        this.dueDate = dueDate;
+        this.priority = priority;
         this.notes = notes;
-        this._status = status;
+        this.status = status;
     }
 
     set priority(value) {
-        const priorities = ["low", "medium", "high"];
-        if (priorities.includes(value)) {
+        if (PriorityValidator.validate(value)) {
             this._priority = value;
         }
     }
 
     set status(value) {
-        const statuses = ["Not started", "In progress", "Completed"];
-        if (statuses.includes(value)) {
+        if (StatusValidator.validate(value)) {
             this._status = value;
+        }
+    }
+
+    set dueDate(value) {
+        if (DueDateValidator.validate(value)) {
+            this._dueDate = value;
         }
     }
 
@@ -51,4 +66,45 @@ class Todo {
     get status() {
         return this._status;
     }
+    
+    get dueDate() {
+        return DueDateFormatter.formatDueDate(this._dueDate);
+    }
 }
+
+class PriorityValidator {
+    static validate(value) {
+        const priorities = ["low", "medium", "high"];
+        if (priorities.includes(value)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+class StatusValidator {
+    static validate(value) {
+        const statuses = ["Not started", "In progress", "Completed"];
+        if (statuses.includes(value)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+class DueDateValidator {
+    static validate(value) {
+        if (value instanceof Date && !isNaN(value)) {
+            return true;
+        }
+    }
+}
+
+class DueDateFormatter {
+    static formatDueDate(value) {
+        return format(value, "MM/dd/yyyy");
+    }
+}
+
