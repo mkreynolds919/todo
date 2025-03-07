@@ -18,10 +18,7 @@ class Project {
     get progress() {
         return this._progress;
     }
-
-    
 }
-
 
 class Todo {
     constructor(title, description, dueDate, priority, notes, status) {
