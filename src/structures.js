@@ -15,6 +15,10 @@ class Project {
         }
     }
 
+    get progress() {
+        return this._progress;
+    }
+
     
 }
 
