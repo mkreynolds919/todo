@@ -8,4 +8,18 @@ class Todo {
         this.notes = notes;
         this.status = status;
     }
+
+    set priority(value) {
+        const priorities = ["low", "medium", "high"];
+        if (priorities.includes(value)) {
+            this.priority = value;
+        }
+    }
+
+    set status(value) {
+        const statuses = ["not started", "in progress", "completed"];
+        if (statuses.includes(value)) {
+            this.status = value;
+        }
+    }
 }
