@@ -7,7 +7,7 @@ class Project {
         this.description = description;
         this.dueDate = dueDate;
         this.status = status;
-        this.contents = [];
+        this.contents = new ToDoList();
     }
 
     set status(value) {
@@ -31,7 +31,7 @@ class Project {
     }
 }
 
-class Todo {
+class Task {
     constructor(title, description, dueDate, priority, notes, status) {
         this.title = title;
         this.description = description;
@@ -69,6 +69,21 @@ class Todo {
     
     get dueDate() {
         return DueDateFormatter.formatDueDate(this._dueDate);
+    }
+}
+
+class TodoList {
+    constructor() {
+        this.data = []
+    }
+
+    add(item) {
+        this.data.push(item);
+    }
+
+    remove(item) {
+        const index = this.data.indexOf(item);
+        this.data.splice(index, 1);
     }
 }
 
