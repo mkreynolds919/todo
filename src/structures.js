@@ -87,6 +87,21 @@ class TodoList {
     }
 }
 
+class ProjectList {
+    constructor() {
+        this.data = [];
+    }
+
+    add(item) {
+        this.data.push(item);
+    }
+
+    remove(item) {
+        const index = this.data.indexOf(item);
+        this.data.splice(index, 1);
+    }  
+}
+
 class PriorityValidator {
     static validate(value) {
         const priorities = ["low", "medium", "high"];
