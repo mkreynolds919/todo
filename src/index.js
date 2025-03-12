@@ -1,1 +1,1 @@
-import { Todo, Project } from "./structures";
+import "./sidebar.css";
