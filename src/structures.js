@@ -37,7 +37,6 @@ class Task {
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.notes = notes;
         this.status = status;
     }
 
@@ -134,7 +133,7 @@ class DueDateValidator {
 
 class DueDateFormatter {
     static formatDueDate(value) {
-        return format(value, "MM/dd/yyyy");
+        return format(value, "MM/dd/yyyy HH:mm");
     }
 }
 
