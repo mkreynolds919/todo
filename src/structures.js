@@ -32,7 +32,7 @@ class Project {
 }
 
 class Task {
-    constructor(title, description, dueDate, priority, notes, status) {
+    constructor(title, description, dueDate, priority, status) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
