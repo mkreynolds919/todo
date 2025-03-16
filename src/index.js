@@ -1,5 +1,6 @@
 import "./sidebar.css";
 import "./main.css";
+import "./form.css";
 import { EditProjectConstructor } from "./dom";
 
 document.addEventListener("DOMContentLoaded", () => {

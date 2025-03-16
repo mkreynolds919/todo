@@ -91,7 +91,7 @@ class DueDateInput {
         timeInput.className = "time-input-container";
 
         const hoursInput = document.createElement("input");
-        hoursInput.type = "number";
+        hoursInput.type = "text";
         hoursInput.textContent = this.dueDate.getHours();
         hoursInput.value = this.dueDate.getHours();
         hoursInput.className = "time-input";
@@ -102,7 +102,7 @@ class DueDateInput {
         colon.className = "colon";
 
         const minutesInput = document.createElement("input");
-        minutesInput.type = "number";
+        minutesInput.type = "text";
         minutesInput.textContent = this.dueDate.getMinutes();
         minutesInput.value = this.dueDate.getMinutes();
         minutesInput.className = "time-input";
@@ -117,28 +117,37 @@ class DueDateInput {
         monthDayYearDiv.className = "month-day-year-input-container";
 
         const monthInput = document.createElement("input");
-        monthInput.type = "number";
+        monthInput.type = "text";
         monthInput.textContent = this.dueDate.getMonth() + 1;
         monthInput.value = this.dueDate.getMonth() + 1;
         monthInput.className = "month-day-input";
         monthInput.id = `${this.descriptor}-month`;
 
         const dayInput = document.createElement("input");
-        dayInput.type = "number";
+        dayInput.type = "text";
         dayInput.textContent = this.dueDate.getDate();
         dayInput.value = this.dueDate.getDate();
         dayInput.className = "month-day-input";
         dayInput.id = `${this.descriptor}-day`;
 
         const yearInput = document.createElement("input");
-        yearInput.type = "number";
+        yearInput.type = "text";
         yearInput.textContent = this.dueDate.getFullYear();
         yearInput.value = this.dueDate.getFullYear();
         yearInput.className = "year-input";
         yearInput.id = `${this.descriptor}-year`;
 
+        const slash = document.createElement("span");
+        slash.textContent = "/";
+        slash.className = "slash";
+        const slash2 = document.createElement("span");
+        slash2.textContent = "/";
+        slash2.className = "slash";
+
         monthDayYearDiv.appendChild(monthInput);
+        monthDayYearDiv.appendChild(slash);
         monthDayYearDiv.appendChild(dayInput);
+        monthDayYearDiv.appendChild(slash2);
         monthDayYearDiv.appendChild(yearInput);
         dueDateDiv.appendChild(monthDayYearDiv);
 
@@ -181,6 +190,7 @@ class SubmitButton {
         submitButton.type = "submit";
         submitButton.id = `${this.descriptor}-submit`;
         submitButton.textContent = "Submit";
+        submitButton.className = "submit-button";
         return submitButton;
     }
 }

@@ -19,10 +19,8 @@ body {
 }
 
 #content {
-    margin: 100px;
-    height: 80%;
-    width: 80%;
     border-radius: 12px;
+    padding: 3rem;
 }
 
 .lighter-color {
