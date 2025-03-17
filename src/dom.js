@@ -1,4 +1,7 @@
 
+import { projectList } from "./index";
+import { Project, Task, TodoList, ProjectList } from "./structures";
+
 export class EditProjectConstructor {
     constructor(title = "New Project", description = "Enter description...", dueDate = Date.now(), status = "Not started") {
         this.title = title;
@@ -24,6 +27,18 @@ export class EditProjectConstructor {
         const submitButton = new SubmitButton("project");
         projectForm.appendChild(submitButton.createElement());
 
+        projectForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const projectTitle = document.getElementById("project-title").value;
+            const projectDescription = document.getElementById("project-description").value;
+            const projectDueDate = new Date(`${document.getElementById("project-month").value}/${document.getElementById("project-day").value}/${document.getElementById("project-year").value} ${document.getElementById("project-hours").value}:${document.getElementById("project-minutes").value}`);
+            const projectStatus = document.getElementById("project-status").value;
+            const project = new Project(projectTitle, projectDescription, projectDueDate, projectStatus);
+            projectList.add(project);
+            Sidebar.appendProject(project);
+        });
+    
+
         return projectForm;
       
     }
@@ -35,12 +50,82 @@ class EditTaskConstructor {
 
 }
 
-class SidebarAppendProject {
-
+class Sidebar {
+    static appendProject(project) {
+        const projectListDiv = document.getElementById("project-list");
+        const spc = new SidebarProjectCard(project);
+        projectListDiv.appendChild(spc.createElement());
+    }
 }
 
-class SidebarAppendTask {
+class SidebarProjectCard {
+    constructor(project) {
+        this.project = project;
+    }
 
+    createElement() {
+        const projectCard = document.createElement("div");
+        projectCard.className = "project-card";
+
+        const projectTitle = document.createElement("div");
+        projectTitle.textContent = this.project.title;
+        projectCard.appendChild(projectTitle);
+
+        const buttonDiv = document.createElement("div");
+        buttonDiv.className = "project-card-button-div";
+
+        const editButton = new EditButton(this.project);
+        buttonDiv.appendChild(editButton.createElement());
+        
+        const deleteButton = new DeleteButton(this.project);
+        buttonDiv.appendChild(deleteButton.createElement());
+
+        projectCard.appendChild(buttonDiv);
+
+
+        return projectCard;
+    }
+}
+
+class EditButton {
+    constructor(project) {
+        this.project = project;
+    }
+
+    createElement() {
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.className = "project-card-button";
+        editButton.addEventListener("click", () => {
+            const epc = new EditProjectConstructor(this.project.title, this.project.description, this.project.dueDate, this.project.status);
+            const content = document.getElementById("content");
+            content.innerHTML = "";
+            content.appendChild(epc.createForm());
+        });
+        return editButton;
+    }
+}
+
+class DeleteButton {
+    constructor(project) {
+        this.project = project;
+    }
+
+    createElement() {
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "project-card-button";
+        deleteButton.addEventListener("click", () => {
+            projectList.remove(this.project);
+            const projectListDiv = document.getElementById("project-list");
+            projectListDiv.innerHTML = "";
+            projectList.data.forEach(project => {
+                const spc = new SidebarProjectCard(project);
+                projectListDiv.appendChild(spc.createElement());
+            });
+        });
+        return deleteButton;
+    }
 }
 
 class TitleInput {

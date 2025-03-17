@@ -7,7 +7,8 @@ class Project {
         this.description = description;
         this.dueDate = dueDate;
         this.status = status;
-        this.contents = new ToDoList();
+        this.contents = new TodoList();
+        this.id = crypto.randomUUID();
     }
 
     set status(value) {
@@ -137,3 +138,4 @@ class DueDateFormatter {
     }
 }
 
+export { Project, Task, TodoList, ProjectList };
