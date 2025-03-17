@@ -92,8 +92,14 @@ class DueDateInput {
 
         const hoursInput = document.createElement("input");
         hoursInput.type = "text";
-        hoursInput.textContent = this.dueDate.getHours();
-        hoursInput.value = this.dueDate.getHours();
+        if (this.dueDate.getHours() < 10) {
+            hoursInput.value = `0${this.dueDate.getHours()}`;
+            hoursInput.textContent = `0${this.dueDate.getHours()}`;
+        }
+        else {
+            hoursInput.value = this.dueDate.getHours();
+            hoursInput.textContent = this.dueDate.getHours();
+        }
         hoursInput.className = "time-input";
         hoursInput.id = `${this.descriptor}-hours`;
 
