@@ -10,6 +10,44 @@ export class EditProjectConstructor {
         this.status = status;
     }
 
+    createNewProjectForm() {
+        const projectForm = this.createForm();
+
+        projectForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const projectTitle = document.getElementById("project-title").value;
+            const projectDescription = document.getElementById("project-description").value;
+            const projectDueDate = new Date(`${document.getElementById("project-month").value}/${document.getElementById("project-day").value}/${document.getElementById("project-year").value} ${document.getElementById("project-hours").value}:${document.getElementById("project-minutes").value}`);
+            const projectStatus = document.getElementById("project-status").value;
+            const project = new Project(projectTitle, projectDescription, projectDueDate, projectStatus);
+            projectList.add(project);
+            Sidebar.updateProjects();
+        });
+
+        return projectForm;
+    }
+
+    createEditProjectForm(project) {
+        const projectForm = this.createForm();
+
+        projectForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const projectTitle = document.getElementById("project-title").value;
+            const projectDescription = document.getElementById("project-description").value;
+            const projectDueDate = new Date(`${document.getElementById("project-month").value}/${document.getElementById("project-day").value}/${document.getElementById("project-year").value} ${document.getElementById("project-hours").value}:${document.getElementById("project-minutes").value}`);
+            const projectStatus = document.getElementById("project-status").value;
+            project.title = projectTitle;
+            project.description = projectDescription;
+            project.dueDate = projectDueDate;
+            project.status = projectStatus;
+
+            Sidebar.updateProjects();
+           
+        });
+        return projectForm;
+    }
+
+
     createForm() {
         const projectForm = document.createElement("form");
         projectForm.id = "project-form";
@@ -27,34 +65,33 @@ export class EditProjectConstructor {
         const submitButton = new SubmitButton("project");
         projectForm.appendChild(submitButton.createElement());
 
-        projectForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const projectTitle = document.getElementById("project-title").value;
-            const projectDescription = document.getElementById("project-description").value;
-            const projectDueDate = new Date(`${document.getElementById("project-month").value}/${document.getElementById("project-day").value}/${document.getElementById("project-year").value} ${document.getElementById("project-hours").value}:${document.getElementById("project-minutes").value}`);
-            const projectStatus = document.getElementById("project-status").value;
-            const project = new Project(projectTitle, projectDescription, projectDueDate, projectStatus);
-            projectList.add(project);
-            Sidebar.appendProject(project);
-        });
+        
     
 
         return projectForm;
-      
     }
 
 }
 
 
 class EditTaskConstructor {
-
+    constructor(title = "New Task", description = "Enter description...", priority = "Low", status = "Not started", project="None") {
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.status = status;
+        this.project = project;
+    }
 }
 
 class Sidebar {
-    static appendProject(project) {
+    static updateProjects() {
         const projectListDiv = document.getElementById("project-list");
-        const spc = new SidebarProjectCard(project);
-        projectListDiv.appendChild(spc.createElement());
+        projectListDiv.innerHTML = "";
+        projectList.data.forEach(project => {
+            const spc = new SidebarProjectCard(project);
+            projectListDiv.appendChild(spc.createElement());
+        });
     }
 }
 
@@ -100,7 +137,7 @@ class EditButton {
             const epc = new EditProjectConstructor(this.project.title, this.project.description, this.project.dueDate, this.project.status);
             const content = document.getElementById("content");
             content.innerHTML = "";
-            content.appendChild(epc.createForm());
+            content.appendChild(epc.createEditProjectForm(this.project));
         });
         return editButton;
     }
