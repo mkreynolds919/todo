@@ -1,8 +1,8 @@
 
-import { projectList } from "./index";
+import { projectList, taskList } from "./index";
 import { Project, Task, TodoList, ProjectList } from "./structures";
 
-export class EditProjectConstructor {
+class EditProjectConstructor {
     constructor(title = "New Project", description = "Enter description...", dueDate = Date.now(), status = "Not started") {
         this.title = title;
         this.description = description;
@@ -75,12 +75,80 @@ export class EditProjectConstructor {
 
 
 class EditTaskConstructor {
-    constructor(title = "New Task", description = "Enter description...", priority = "Low", status = "Not started", project="None") {
+    constructor(title = "New Task", description = "Enter description...", dueDate = Date.now(), priority = "Low", status = "Not started", project="None") {
         this.title = title;
         this.description = description;
+        this.dueDate = new Date(dueDate);
         this.priority = priority;
         this.status = status;
         this.project = project;
+    }
+
+    createNewTaskForm() {
+        const taskForm = this.createForm();
+
+        taskForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const taskTitle = document.getElementById("task-title").value;
+            const taskDescription = document.getElementById("task-description").value;
+            const taskPriority = document.getElementById("task-priority").value;
+            const taskStatus = document.getElementById("task-status").value;
+            const taskProject = this.project;
+            const task = new Task(taskTitle, taskDescription, taskPriority, taskStatus);
+            if (taskProject == "None") {
+                taskList.add(task);
+            } else {
+                taskProject.contents.add(task);
+            }
+
+            Sidebar.updateTasks();
+            
+        });
+
+        return taskForm;
+    }
+
+    createEditTaskForm(task) {
+        const taskForm = this.createForm();
+
+        taskForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const taskTitle = document.getElementById("task-title").value;
+            const taskDescription = document.getElementById("task-description").value;
+            const taskDueDate = new Date(`${document.getElementById("task-month").value}/${document.getElementById("task-day").value}/${document.getElementById("task-year").value} ${document.getElementById("task-hours").value}:${document.getElementById("task-minutes").value}`);
+            const taskPriority = document.getElementById("task-priority").value;
+            const taskStatus = document.getElementById("task-status").value;
+            task.title = taskTitle;
+            task.description = taskDescription;
+            task.dueDate = taskDueDate;
+            task.priority = taskPriority;
+            task.status = taskStatus;
+
+            Sidebar.updateTasks();
+        });
+        return taskForm;
+    }
+
+    createForm() {
+        const taskForm = document.createElement("form");
+        taskForm.id = "task-form";
+
+        const titleInput = new TitleInput(this.title, "task");
+        const descriptionInput = new DescriptionInput(this.description, "task");
+        const dueDateInput = new DueDateInput(this.dueDate, "task");
+        const priorityInput = new PriorityInput(this.priority, "task");
+        const statusInput = new StatusInput(this.status, "task");
+
+        taskForm.appendChild(titleInput.createElement());
+        taskForm.appendChild(descriptionInput.createElement());
+        taskForm.appendChild(dueDateInput.createElement());
+        taskForm.appendChild(priorityInput.createElement());
+        taskForm.appendChild(statusInput.createElement());
+
+        const submitButton = new SubmitButton("task");
+        taskForm.appendChild(submitButton.createElement());
+
+        return taskForm;
     }
 }
 
@@ -91,6 +159,15 @@ class Sidebar {
         projectList.data.forEach(project => {
             const spc = new SidebarProjectCard(project);
             projectListDiv.appendChild(spc.createElement());
+        });
+    }
+
+    static updateTasks() {
+        const taskListDiv = document.getElementById("task-list");
+        taskListDiv.innerHTML = "";
+        taskList.data.forEach(task => {
+            const stc = new SidebarTaskCard(task);
+            taskListDiv.appendChild(stc.createElement());
         });
     }
 }
@@ -121,6 +198,34 @@ class SidebarProjectCard {
 
 
         return projectCard;
+    }
+}
+
+class SidebarTaskCard {
+    constructor(task) {
+        this.task = task;
+    }
+
+    createElement() {
+        const taskCard = document.createElement("div");
+        taskCard.className = "task-card";
+
+        const taskTitle = document.createElement("div");
+        taskTitle.textContent = this.task.title;
+        taskCard.appendChild(taskTitle);
+
+        const buttonDiv = document.createElement("div");
+        buttonDiv.className = "task-card-button-div";
+
+        const editButton = new EditButton(this.task);
+        buttonDiv.appendChild(editButton.createElement());
+
+        const deleteButton = new DeleteButton(this.task);
+        buttonDiv.appendChild(deleteButton.createElement());
+
+        taskCard.appendChild(buttonDiv);
+
+        return taskCard;
     }
 }
 
@@ -309,6 +414,32 @@ class StatusInput {
     }
 }
 
+class PriorityInput {
+    constructor(priority, descriptor) {
+        this.priority = priority;
+        this.descriptor = descriptor;
+    }
+
+    createElement() {
+        const priorityInput = document.createElement("select");
+        priorityInput.id = `${this.descriptor}-priority`;
+        priorityInput.className = "priority-input";
+
+        const priorities = ["Low", "Medium", "High"];
+        priorities.forEach(priority => {
+            const option = document.createElement("option");
+            option.value = priority;
+            option.textContent = priority;
+            if (priority === this.priority) {
+                option.selected = true;
+            }
+            priorityInput.appendChild(option);
+        });
+
+        return priorityInput;
+    }
+}
+
 class SubmitButton {
     constructor(descriptor) {
         this.descriptor = descriptor;
@@ -322,3 +453,5 @@ class SubmitButton {
         return submitButton;
     }
 }
+
+export { EditProjectConstructor, EditTaskConstructor };
