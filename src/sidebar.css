@@ -11,3 +11,23 @@
     display: flex;
     justify-content: space-between;
 }
+
+.project-card, .task-card {
+    display: flex;
+    margin: 5px;
+    padding: 5px;
+    justify-content: space-between;
+}
+.sidebar-project-container, .sidebar-task-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.project-card-button-div, .task-card-button-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
