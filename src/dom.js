@@ -191,7 +191,7 @@ class SidebarProjectCard {
         const editButton = new EditButton(this.project);
         buttonDiv.appendChild(editButton.createElement());
         
-        const deleteButton = new DeleteButton(this.project);
+        const deleteButton = new ProjectDeleteButton(this.project);
         buttonDiv.appendChild(deleteButton.createElement());
 
         projectCard.appendChild(buttonDiv);
@@ -220,7 +220,7 @@ class SidebarTaskCard {
         const editButton = new EditButton(this.task);
         buttonDiv.appendChild(editButton.createElement());
 
-        const deleteButton = new DeleteButton(this.task);
+        const deleteButton = new TaskDeleteButton(this.task);
         buttonDiv.appendChild(deleteButton.createElement());
 
         taskCard.appendChild(buttonDiv);
@@ -248,7 +248,7 @@ class EditButton {
     }
 }
 
-class DeleteButton {
+class ProjectDeleteButton {
     constructor(project) {
         this.project = project;
     }
@@ -264,6 +264,28 @@ class DeleteButton {
             projectList.data.forEach(project => {
                 const spc = new SidebarProjectCard(project);
                 projectListDiv.appendChild(spc.createElement());
+            });
+        });
+        return deleteButton;
+    }
+}
+
+class TaskDeleteButton {
+    constructor(task) {
+        this.task = task;
+    }
+
+    createElement() {
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "task-card-button";
+        deleteButton.addEventListener("click", () => {
+            taskList.remove(this.task);
+            const taskListDiv = document.getElementById("task-list");
+            taskListDiv.innerHTML = "";
+            taskList.data.forEach(project => {
+                const stc = new SidebarTaskCard(task);
+                taskListDiv.appendChild(stc.createElement());
             });
         });
         return deleteButton;
