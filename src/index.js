@@ -17,6 +17,7 @@ addProject.addEventListener("click", () => {
     const content = document.getElementById("content");
     content.innerHTML = "";
     content.appendChild(form);
+    content.appendChild(editProject.createProjectTaskList());
 });
 
 addTask.addEventListener("click", () => {

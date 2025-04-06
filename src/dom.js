@@ -3,11 +3,12 @@ import { projectList, taskList } from "./index";
 import { Project, Task, TodoList, ProjectList } from "./structures";
 
 class EditProjectConstructor {
-    constructor(title = "New Project", description = "Enter description...", dueDate = Date.now(), status = "Not started") {
+    constructor(title = "New Project", description = "Enter description...", dueDate = Date.now(), status = "Not started", taskList = new TodoList()) {
         this.title = title;
         this.description = description;
         this.dueDate = new Date(dueDate);
         this.status = status;
+        this.taskList = taskList;
     }
 
     createNewProjectForm() {
@@ -69,6 +70,22 @@ class EditProjectConstructor {
     
 
         return projectForm;
+    }
+
+    createProjectTaskList() {
+        const projectTaskList = document.createElement("div");
+        projectTaskList.id = "project-task-list";
+        projectTaskList.className = "project-task-list";
+        projectTaskList.textContent = "Tasks";
+        this.taskList.data.forEach(task => {
+            const taskCard = document.createElement("div");
+            taskCard.className = "task-card";
+            taskCard.textContent = `${task.title}     ${task.status}     ${task.priority}`;
+            taskCard.appendChild(EditTaskButton.createElement(task));
+            taskCard.appendChild(TaskDeleteButton.createElement(task));
+            projectTaskList.appendChild(taskCard);
+        });
+        return projectTaskList;
     }
 
 }
@@ -188,8 +205,8 @@ class SidebarProjectCard {
         const buttonDiv = document.createElement("div");
         buttonDiv.className = "project-card-button-div";
 
-        const editButton = new EditButton(this.project);
-        buttonDiv.appendChild(editButton.createElement());
+        
+        buttonDiv.appendChild(EditProjectButton.createElement(this.project));
         
         const deleteButton = new ProjectDeleteButton(this.project);
         buttonDiv.appendChild(deleteButton.createElement());
@@ -229,20 +246,35 @@ class SidebarTaskCard {
     }
 }
 
-class EditButton {
-    constructor(project) {
-        this.project = project;
+class EditProjectButton {
+    static createElement(project) {
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.className = "project-card-button";
+        editButton.addEventListener("click", () => {
+            const epc = new EditProjectConstructor(project.title, project.description, project.dueDate, project.status);
+            const content = document.getElementById("content");
+            content.innerHTML = "";
+            content.appendChild(epc.createEditProjectForm(project));
+        });
+        return editButton;
+    }
+}
+
+class EditTaskButton {
+    constructor(task) {
+        this.task = task;
     }
 
     createElement() {
         const editButton = document.createElement("button");
         editButton.textContent = "Edit";
-        editButton.className = "project-card-button";
+        editButton.className = "task-card-button";
         editButton.addEventListener("click", () => {
-            const epc = new EditProjectConstructor(this.project.title, this.project.description, this.project.dueDate, this.project.status);
+            const etc = new EditTaskConstructor(this.task.title, this.task.description, this.task.dueDate, this.task.status);
             const content = document.getElementById("content");
             content.innerHTML = "";
-            content.appendChild(epc.createEditProjectForm(this.project));
+            content.appendChild(epc.createEditTaskForm(this.task));
         });
         return editButton;
     }
@@ -283,7 +315,7 @@ class TaskDeleteButton {
             taskList.remove(this.task);
             const taskListDiv = document.getElementById("task-list");
             taskListDiv.innerHTML = "";
-            taskList.data.forEach(project => {
+            taskList.data.forEach(task => {
                 const stc = new SidebarTaskCard(task);
                 taskListDiv.appendChild(stc.createElement());
             });
