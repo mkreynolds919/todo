@@ -234,7 +234,7 @@ class SidebarTaskCard {
         const buttonDiv = document.createElement("div");
         buttonDiv.className = "task-card-button-div";
 
-        const editButton = new EditButton(this.task);
+        const editButton = new EditTaskButton(this.task);
         buttonDiv.appendChild(editButton.createElement());
 
         const deleteButton = new TaskDeleteButton(this.task);
@@ -271,7 +271,7 @@ class EditTaskButton {
         editButton.textContent = "Edit";
         editButton.className = "task-card-button";
         editButton.addEventListener("click", () => {
-            const etc = new EditTaskConstructor(this.task.title, this.task.description, this.task.dueDate, this.task.status);
+            const etc = new EditTaskConstructor(this.task.title, this.task.description, this.task.dueDate, this.task.priority, this.task.status);
             const content = document.getElementById("content");
             content.innerHTML = "";
             content.appendChild(epc.createEditTaskForm(this.task));
